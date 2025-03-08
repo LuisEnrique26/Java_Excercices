@@ -2,11 +2,9 @@ package edu.utvt.springdata.controllers;
 import edu.utvt.springdata.data.entities.Player;
 import edu.utvt.springdata.data.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +25,25 @@ public class PlayerController {
         return ResponseEntity.of(this.playerService.findById(id));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
+        this.playerService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
+        return ResponseEntity.created(null).body(this.playerService.save(player));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Player> updatePlayer(@RequestBody Player player, Long id) {
+        return ResponseEntity.ok(this.playerService.update(player, id));
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<Player>> findAllPlayers(@RequestParam(defaultValue = "0", value = "page") Integer pageNumber,
+                                                       @RequestParam(defaultValue = "50", value = "size") Integer pageSize) {
+        return ResponseEntity.ok(this.playerService.findAll(pageNumber, pageSize));
+    };
 }

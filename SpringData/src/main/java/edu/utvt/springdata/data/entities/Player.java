@@ -18,7 +18,7 @@ public class Player {
     private Integer ranking;
 
     @Column(nullable = false, length = 100)
-    private String full_name;
+    private String fullname;
 
     @Column(nullable = false, length = 100)
     private String team;
